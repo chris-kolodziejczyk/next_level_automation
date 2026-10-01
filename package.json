@@ -4,6 +4,9 @@
   "description": "**Wzorce AAA i SMURF jako „next level” po Page Object: typowane Fixtures i testy API w praktyce**",
   "main": "index.js",
   "scripts": {
+    "lint:src": "eslint src --max-warnings=0",
+    "lint:tests": "eslint tests --max-warnings=0",
+    "lint:fixtures": "eslint fixtures --max-warnings=0",
     "app": "node app/server.js",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
@@ -25,8 +28,12 @@
   },
   "homepage": "https://github.com/chris-kolodziejczyk/next_level_automation#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.3",
-    "dotenv": "^18.0.5"
+    "dotenv": "^18.0.5",
+    "eslint": "^10.11.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0"
   }
 }
