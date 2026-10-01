@@ -1,0 +1,32 @@
+{
+  "name": "atwp_next_level_automation",
+  "version": "1.0.0",
+  "description": "**Wzorce AAA i SMURF jako „next level” po Page Object: typowane Fixtures i testy API w praktyce**",
+  "main": "index.js",
+  "scripts": {
+    "app": "node app/server.js",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "install:browsers": "playwright install --with-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/testerspl/atwp_next_level_automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/testerspl/atwp_next_level_automation/issues"
+  },
+  "homepage": "https://github.com/testerspl/atwp_next_level_automation#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "dotenv": "^17.4.2"
+  }
+}
