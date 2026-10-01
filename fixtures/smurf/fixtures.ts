@@ -1,6 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { LoginPage } from '../../src/pageobjects/LoginPage';
-import { loginFormHtml, validPassword } from './loginForm';
+import { WorkshopLoginPage } from '../../src/pageobjects/WorkshopLoginPage';
 
 type TestUser = {
   email: string;
@@ -8,27 +7,23 @@ type TestUser = {
 };
 
 type SmurfFixtures = {
-  loginPage: LoginPage;
+  loginPage: WorkshopLoginPage;
   testUser: TestUser;
 };
 
 export const test = base.extend<SmurfFixtures>({
   testUser: async ({}, use, testInfo) => {
-    const slug = testInfo.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
-      .slice(0, 32);
-
-    await use({
-      email: `smurf-${testInfo.workerIndex}-${testInfo.retry}-${slug}@example.com`,
-      password: validPassword,
-    });
+    // TODO: Przygotuj dane użytkownika: email i password.
+    // Użyj testInfo do izolacji danych między testami, workerami i retry.
+    // Przekaż użytkownika do testu przez await use(...).
+    // Jeśli tworzysz użytkownika przez API, dodaj cleanup po await use(...).
+    throw new Error('TODO: Zaimplementuj fixture testUser');
   },
 
   loginPage: async ({ page }, use) => {
-    await page.setContent(loginFormHtml);
-    await use(new LoginPage(page));
+    // TODO: Utwórz WorkshopLoginPage dla page i otwórz lokalną aplikację.
+    // Przekaż Page Object do testu przez await use(...).
+    throw new Error('TODO: Zaimplementuj fixture loginPage');
   },
 });
 

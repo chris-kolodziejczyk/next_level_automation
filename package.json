@@ -14,19 +14,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/testerspl/atwp_next_level_automation.git"
+    "url": "git+https://github.com/chris-kolodziejczyk/next_level_automation.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/testerspl/atwp_next_level_automation/issues"
+    "url": "https://github.com/chris-kolodziejczyk/next_level_automation/issues"
   },
-  "homepage": "https://github.com/testerspl/atwp_next_level_automation#readme",
+  "homepage": "https://github.com/chris-kolodziejczyk/next_level_automation#readme",
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.1",
-    "dotenv": "^17.4.2"
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "dotenv": "^18.0.5"
   }
 }

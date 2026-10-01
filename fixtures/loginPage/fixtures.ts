@@ -1,18 +1,13 @@
 import { test as base, expect, type APIRequestContext } from '@playwright/test';
-import { LoginPage } from '../../src/pageobjects/LoginPage';
-
-// const TestFixtures = {
-
-// }
+import { WorkshopLoginPage } from '../../src/pageobjects/WorkshopLoginPage';
 
 type TestFixtures = {
-	loginPage: LoginPage;
+	loginPage: WorkshopLoginPage;
 	seedUserId: string;
 };
 
 type WorkerFixtures = {
 	api: APIRequestContext;
-	authToken: string;
 };
 
 export const test = base.extend<TestFixtures, WorkerFixtures>({
@@ -31,13 +26,6 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
 		{ scope: 'worker' },
 	],
 
-	authToken: [
-		async ({}, use, workerInfo) => {
-			await use(`workshop-token-${workerInfo.workerIndex}`);
-		},
-		{ scope: 'worker' },
-	],
-
 	seedUserId: async ({}, use, testInfo) => {
 		const slug = testInfo.title
 			.toLowerCase()
@@ -51,7 +39,7 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
 	},
 
 	loginPage: async ({ page }, use) => {
-		await use(new LoginPage(page));
+		await use(new WorkshopLoginPage(page));
 	},
 });
 
