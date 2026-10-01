@@ -1,102 +1,159 @@
-# Zaawansowana automatyzacja - Playwright + TypeScript
+# Zaawansowana automatyzacja — Playwright + TypeScript
 
-## Wzorce AAA i SMURF jako next level po Page Object: typowane fixtures i testy API w praktyce
+Starter warsztatowy dla osób znających podstawy Playwrighta. Uczestnik ćwiczy AAA (Arrange, Act, Assert), Page Object, SMURF (Small, Maintainable, Understandable, Repeatable, Fast), typowane fixtures i przygotowanie danych przez API.
 
-To repozytorium jest starterem projektu warsztatowego dla osób, które znają już podstawy Playwrighta i chcą wejść poziom wyżej: uporządkować testy według AAA, świadomie używać Page Object, pisać testy zgodne z zasadą SMURF oraz budować typowane fixtures pod scenariusze UI, API i hybrydowe.
+## Aktualny stan startera
 
-## Co to jest i dla kogo
+- `tests/patterns/login-aaa.spec.ts` i `login-smurf-before-each.spec.ts` to gotowe przykłady na HTML podstawionym przez `page.route`. Nie wymagają aplikacji demo.
+- `src/pageobjects/WorkshopLoginPage.ts` jest szkieletem z TODO: locatory i metoda `loginAs` są zadaniem uczestnika.
+- `fixtures/smurf/fixtures.ts` jest typowanym szkieletem z TODO dla `testUser` i `loginPage`. Niezrealizowane fixtures zgłaszają błąd TODO.
+- `fixtures/loginPage/fixtures.ts` pokazuje kontekst API o zasięgu workera, identyfikator danych i tworzenie `WorkshopLoginPage`. Nie tworzy użytkownika przez API ani nie otwiera strony automatycznie.
+- Testy i Page Objects TestArena zostały usunięte. Scenariusze API + UI należy napisać w ramach ćwiczeń.
 
-Projekt służy jako punkt startowy dla uczestników średnio- i zaawansowanych warsztatów automatyzacji w Playwright + TypeScript. Skupiamy się na praktyce:
+**Ograniczenie:** `tests/patterns/login-page-object.spec.ts` nadal importuje usunięty `src/pageobjects/LoginPage.ts`. Pełne `npm test`, ostatni krok setupu i CI zgłoszą błąd importu do czasu dostosowania tego przykładu lub przeniesienia go poza katalog testów. Sama zamiana importu na `WorkshopLoginPage` nie wystarczy: lokalna aplikacja ma inne selektory i komunikaty niż podstawiony formularz.
 
-- wzorzec **AAA** (Arrange, Act, Assert),
-- wzorzec **SMURF** (Small, Maintainable, Understandable, Repeatable, Fast),
-- typowane fixtures o zasięgu testu i workera,
-- Page Object jako warstwa intencji użytkownika,
-- testy API oraz hybrydy API + UI,
-- redukcja flakiness przez stabilne selektory, retry i artefakty diagnostyczne.
-
-## Struktura projektu warsztatowego
+## Struktura
 
 ```text
 .
-├─ README.md
-├─ README-SETUP.md
-├─ COMMANDS.md
-├─ package.json
-├─ package-lock.json
-├─ playwright.config.ts
-├─ tsconfig.json
+├─ README.md, README-SETUP.md, COMMANDS.md
+├─ package.json, package-lock.json
+├─ playwright.config.ts, tsconfig.json
 ├─ .env.sample
-├─ .gitignore
-├─ setup.ps1
-├─ setup.sh
+├─ setup.ps1, setup.sh
+├─ .github/workflows/playwright.yml
 ├─ app/
 │  ├─ README.md
 │  └─ server.js
 ├─ docs/
-│  ├─ PROJECT.md
 │  ├─ AAA.md
 │  ├─ PAGE_OBJECT.md
 │  └─ SMURF.md
 ├─ exercises/
 │  ├─ README.md
-│  ├─ KOLEJNOSC-PRAC.md
 │  ├─ 01-aaa.md
 │  ├─ 02-page-object.md
 │  ├─ 03-smurf.md
-│  ├─ 04-fixtures-api.md
-│  └─ 05-testarena-przypadki-testowe.md
+│  └─ 04-fixtures-api.md
 ├─ fixtures/
-│  ├─ loginPage/
-│  │  └─ fixtures.ts
+│  ├─ loginPage/fixtures.ts
 │  └─ smurf/
 │     ├─ fixtures.ts
 │     └─ loginForm.ts
-├─ src/
-│  └─ pageobjects/
-│     ├─ basePage.ts
-│     ├─ LoginPage.ts
-│     └─ WorkshopLoginPage.ts
-└─ tests/
-   ├─ example.spec.ts
-   ├─ patterns/
-   │  ├─ login-aaa.spec.ts
-   │  ├─ login-page-object.spec.ts
-   │  └─ login-smurf-before-each.spec.ts
-   └─ smurf/
-      └─ example.spec.ts
+├─ src/pageobjects/
+│  ├─ basePage.ts
+│  └─ WorkshopLoginPage.ts
+└─ tests/patterns/
+   ├─ login-aaa.spec.ts
+   ├─ login-page-object.spec.ts
+   └─ login-smurf-before-each.spec.ts
 ```
 
-## Szybkie wymagania
+`fixtures/smurf/loginForm.ts` zawiera pomocniczy HTML. Szkielet fixtures nie korzysta z niego; ćwiczenie z `WorkshopLoginPage` dotyczy aplikacji w `app/`.
 
-- Node.js LTS
-- npm
-- Git
-- Visual Studio Code lub inny edytor z obsługą TypeScript
-- Przeglądarki Playwright zainstalowane poleceniem `npm run install:browsers`
+## Przygotowanie środowiska
 
-## Jak zacząć lokalnie
+Wymagane: Node.js LTS, npm, Git i edytor z obsługą TypeScript. Polecenia wykonuj z katalogu głównego projektu.
 
-1. Sklonuj repozytorium.
-2. Skopiuj `.env.sample` do `.env`.
-3. Uruchom `npm ci`.
-4. Uruchom `npm run install:browsers`.
-5. Uruchom aplikację demo przez `npm run app`, jeśli pracujesz z ćwiczeniem API + UI.
-6. Uruchom `npm test`.
+Pobierz projekt i przejdź do jego katalogu:
 
-Szczegóły konfiguracji są w [README-SETUP.md](README-SETUP.md), a pełna lista komend w [COMMANDS.md](COMMANDS.md).
+```bash
+git clone https://github.com/chris-kolodziejczyk/next_level_automation.git
+cd next_level_automation
+```
 
-## Dokumentacja
+1. Zainstaluj zależności: `npm ci`.
+2. Utwórz `.env`: w PowerShell `Copy-Item .env.sample .env`, w Bash `cp .env.sample .env`. Zachowaj własną konfigurację, jeśli plik już istnieje.
+3. Zainstaluj przeglądarki: `npm run install:browsers`.
+4. Uruchom dostępne przykłady:
 
-- [Opis projektu](docs/PROJECT.md) - jak działa projekt, jak czytać strukturę i jakie dobre praktyki są tu zaszyte.
-- [Arrange, Act, Assert](docs/AAA.md) - jak układać testy w czytelne trzy fazy.
-- [Page Object](docs/PAGE_OBJECT.md) - jak modelować ekrany i zachowania bez ukrywania sensu testu.
-- [SMURF](docs/SMURF.md) - praktyczna checklista jakości testów warsztatowych.
+```bash
+npx playwright test tests/patterns/login-aaa.spec.ts tests/patterns/login-smurf-before-each.spec.ts --project=chromium
+```
 
-## Ćwiczenia
+### Skrypty setup
 
-Ćwiczenia dla uczestników są w katalogu [exercises](exercises/README.md). Ich kolejność prowadzi od refaktoryzacji prostego testu, przez Page Object, po SMURF i fixtures API.
+Windows PowerShell:
 
-Gotowy duplikat testów po refaktoryzacji SMURF znajduje się w [tests/smurf/example.spec.ts](tests/smurf/example.spec.ts).
+```powershell
+.\setup.ps1
+```
 
-Dodatkowe, osobne przykłady wzorców są w katalogu [tests/patterns](tests/patterns): AAA, Page Object bez AAA oraz SMURF z `beforeEach` bez fixtures.
+Linux/macOS lub Git Bash:
+
+```bash
+bash setup.sh
+```
+
+Skrypty tworzą `.env`, jeśli nie istnieje, wykonują `npm ci`, instalują przeglądarki i uruchamiają pełne `npm test`. Nie uruchamiają aplikacji demo. Ostatni krok ma obecnie ograniczenie opisane w sekcji „Aktualny stan startera”.
+
+## Lokalna aplikacja
+
+W osobnym terminalu uruchom:
+
+```bash
+npm run app
+```
+
+Formularz: `http://localhost:3000/login`. Playwright nie uruchamia serwera automatycznie — `webServer` jest zakomentowany.
+
+| Zmienna w `.env` | Przeznaczenie |
+|---|---|
+| `BASE_URL` | Bazowy adres nawigacji Playwright, domyślnie `http://localhost:3000` |
+| `LOGIN_URL` | Adres otwierany przez `WorkshopLoginPage` |
+| `API_BASE_URL` | Bazowy adres kontekstu API |
+| `TEST_USER_EMAIL`, `TEST_USER_PASSWORD` | Przykładowe dane do ćwiczeń; szkielety nie odczytują ich automatycznie |
+
+Domyślny użytkownik: `workshop.user@example.com`, hasło `correct-password`. Dane są w pamięci i tracone po restarcie serwera.
+
+API zapewnia health check, reset danych oraz tworzenie, listowanie, aktualizację i usuwanie użytkowników. Endpointy opisuje [app/README.md](app/README.md).
+
+Przy `API_BASE_URL=http://localhost:3000/api` z `.env.sample` użycie ścieżki `/api/users` zachowuje prefiks API. Względne `users` przy takim bazowym URL bez końcowego ukośnika może wskazać `/users`; zachowaj spójność adresów w ćwiczeniu.
+
+## Praca uczestnika
+
+1. Przeczytaj przykład AAA i napisz własny test logowania do lokalnej aplikacji.
+2. Uzupełnij locatory i akcję logowania w `WorkshopLoginPage.ts`. Asercję pozostaw w teście.
+3. Uporządkuj scenariusze według SMURF i rozdziel niezależne zachowania.
+4. Uzupełnij `fixtures/smurf/fixtures.ts`: przygotuj dane, przekaż je przez `await use(...)`, dodaj cleanup użytkowników tworzonych przez API.
+5. Dodaj własne pliki `*.spec.ts` w `tests/` i uruchamiaj je po każdym etapie.
+
+Przykładowo, po utworzeniu `tests/workshop/login.spec.ts` uruchom tylko swój plik:
+
+```bash
+npx playwright test tests/workshop/login.spec.ts --project=chromium
+```
+
+Ten plik należy utworzyć samodzielnie. Przy selekcji konkretnego pliku pozostały przykład z brakującym importem nie jest zbierany. Dla testów lokalnej aplikacji pozostaw działające `npm run app` w osobnym terminalu.
+
+Materiały w [exercises/](exercises/README.md) zawierają jeszcze odwołania do dawnych `tests/example.spec.ts`, `LoginPage.ts`, `tests/smurf/example.spec.ts` i dodatkowych nieobecnych instrukcji. Aktualnym punktem startowym są szkielety i przykłady opisane powyżej.
+
+## Testy, raporty i CI
+
+Po dostosowaniu przykładu Page Object pełny zestaw uruchomisz przez `npm test`. Domyślnie testy działają na Chromium, Firefox i WebKit.
+
+| Polecenie | Działanie |
+|---|---|
+| `npm test -- --project=chromium` | Pełny zestaw tylko na Chromium |
+| `npm run test:headed` | Widoczne okna przeglądarek |
+| `npm run test:ui` | Interaktywny tryb Playwright UI |
+| `npm run test:debug` | Debugowanie |
+| `npm run test:report` | Otwarcie raportu HTML |
+
+Konfiguracja zapisuje trace każdego wykonania i screenshot przy błędzie. Lokalnie testy mogą działać równolegle; w CI używany jest jeden worker, dwie ponowne próby i blokada `test.only`.
+
+GitHub Actions uruchamia testy na push i pull request do `main` lub `master`. Raport HTML jest przechowywany przez 30 dni. Pipeline nie uruchamia aplikacji demo — po dodaniu rzeczywistych testów UI/API trzeba zapewnić start serwera.
+
+### TypeScript
+
+`tsconfig.json` używa `strict: true`, `noEmit: true` oraz `NodeNext` dla modułów i ich rozwiązywania. Pliki projektu pozostają CommonJS zgodnie z `"type": "commonjs"` w `package.json`.
+
+Projekt nie deklaruje obecnie zależności `typescript` ani skryptu kontroli typów. Uruchamianie testów przez Playwright nie zastępuje pełnej kontroli typów; taka kontrola nie jest też skonfigurowana w CI.
+
+## Materiały
+
+- [AAA](docs/AAA.md)
+- [Page Object](docs/PAGE_OBJECT.md)
+- [SMURF](docs/SMURF.md)
+- [Przygotowanie środowiska](README-SETUP.md)
+- [Polecenia](COMMANDS.md) — przykład z `tests/example.spec.ts` wymaga podmiany na istniejący test.
