@@ -7,7 +7,7 @@ export default defineConfig(
     ignores: ['node_modules/**', 'playwright-report/**', 'test-results/**'],
   },
   {
-    files: ['src/**/*.ts', 'tests/**/*.ts', 'fixtures/**/*.ts'],
+    files: ['src/**/*.ts', 'tests/**/*.ts', 'fixtures/**/*.ts', 'utils/**/*.ts', 'docs/rozwiazania/**/*.ts'],
     extends: [js.configs.recommended, tseslint.configs.recommended],
     rules: {
       'max-depth': ['error', 4],
@@ -15,7 +15,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['fixtures/**/*.ts'],
+    files: ['fixtures/**/*.ts', 'docs/rozwiazania/**/*Fixture.ts'],
     rules: {
       // Playwright requires a destructured first argument even without dependencies.
       'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],

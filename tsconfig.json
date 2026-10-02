@@ -17,6 +17,8 @@
     "playwright.config.ts",
     "fixtures/**/*.ts",
     "src/**/*.ts",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
+    "utils/**/*.ts",
+    "docs/rozwiazania/**/*.ts"
   ]
 }
