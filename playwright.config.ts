@@ -35,7 +35,7 @@ export default defineConfig({
 		/* Base URL to use in actions like `await page.goto('')`. */
 		baseURL,
 
-		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+		/* Collect a trace for every test execution. See https://playwright.dev/docs/trace-viewer */
 		trace: 'on',
 		screenshot: 'only-on-failure',
 		video: 'off',
