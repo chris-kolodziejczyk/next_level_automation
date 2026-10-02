@@ -14,9 +14,7 @@ npm run install:browsers
 
 ## Testy
 
-```bash
-npm run app
-```
+Playwright uruchamia aplikację automatycznie. Polecenie `npm run app` jest potrzebne, jeśli chcesz osobno otworzyć formularz lub uruchomić nagrywanie kroków.
 
 ```bash
 npm test
@@ -35,12 +33,46 @@ npm run test:debug
 ```
 
 ```bash
-npx playwright test tests/example.spec.ts --project=chromium
+npx playwright test tests/patterns/login-aaa.spec.ts --project=chromium
 ```
 
 ```bash
 npx playwright test --grep "login"
 ```
+
+Filtr `--grep` wybiera nazwy testów, a argument ścieżki wybiera pliki. Plik wskazany w ćwiczeniu, np. `tests/workshop/locked-user.spec.ts`, musi najpierw zostać utworzony przez uczestnika.
+
+```bash
+# Wszystkie przykłady dostarczone w repozytorium.
+npx playwright test tests/patterns --project=chromium
+
+# Powtórne wykonanie przykładów w celu sprawdzenia powtarzalności.
+npx playwright test tests/patterns --project=chromium --repeat-each=2
+```
+
+Jeśli masz lokalny, ignorowany przez Git katalog `docs/rozwiazania`, korzystasz z tej samej konfiguracji:
+
+```bash
+npx playwright test docs/rozwiazania --project=chromium
+npx playwright test zadanie5/ --project=chromium
+```
+
+## Typy i lintowanie
+
+```bash
+npx tsc --noEmit
+npm run lint:tests
+npx eslint utils --max-warnings=0
+```
+
+Po uzupełnieniu TODO w Page Object i fixtures sprawdź również:
+
+```bash
+npm run lint:src
+npm run lint:fixtures
+```
+
+W nieuzupełnionym starterze te dwa skrypty zgłaszają nieużywane argumenty w szkieletach. Jeśli masz lokalne rozwiązania, sprawdzisz je przez `npx eslint docs/rozwiazania --max-warnings=0`.
 
 ## Raporty i diagnostyka
 
@@ -49,18 +81,28 @@ npm run test:report
 ```
 
 ```bash
-npx playwright show-trace test-results/path-to-trace.zip
+# Zastąp przykład rzeczywistą ścieżką do pliku trace.zip.
+npx playwright show-trace "test-results/nazwa-wykonania/trace.zip"
 ```
 
 ```bash
-npx playwright test --trace on
+npx playwright test tests/patterns/login-aaa.spec.ts --project=chromium --trace=on
 ```
+
+`playwright.config.ts` już zapisuje trace każdego wykonania (`trace: 'on'`) oraz screenshot po błędzie. Raport HTML jest w `playwright-report`, a wyniki poszczególnych wykonań w `test-results`. `npm run test:report` otwiera raport ostatniego uruchomienia.
 
 ## Generowanie selektorów i nagrywanie kroków
 
 ```bash
-npx playwright codegen http://localhost:3000
+# Uruchom aplikację w osobnym terminalu i pozostaw ją działającą.
+npm run app
 ```
+
+```bash
+npx playwright codegen http://localhost:3000/login
+```
+
+`codegen` nie uruchamia `webServer` z konfiguracji testów. Ręczny start na innym porcie opisuje [app/README.md](app/README.md#start).
 
 ## Git i praca warsztatowa
 
@@ -76,3 +118,5 @@ git checkout -b workshop/my-solution
 git add .
 git commit -m "Add workshop exercise solution"
 ```
+
+`git add .` pomija `.env`, raporty, `node_modules` i `docs/rozwiazania` zgodnie z `.gitignore`. Rozwiązania uczestnika zapisuj w `tests/workshop` i w pozostałych katalogach wskazanych w ćwiczeniach.

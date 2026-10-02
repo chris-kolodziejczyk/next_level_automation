@@ -21,9 +21,10 @@ Przygotuj środowisko według [instrukcji](README.md#przygotowanie-do-rozszerze�
 1. Zadeklaruj typ przypadku z nazwą, informacją o potrzebie utworzenia konta, hasłem do logowania i oczekiwanym komunikatem. Zbuduj tablicę trzech przypadków.
 2. Pętlą `for...of` zadeklaruj trzy osobne wywołania `test(...)`. Pętla ma tworzyć testy podczas zbierania pliku, a nie wykonywać wszystkie przypadki wewnątrz jednego testu.
 3. W Arrange przygotuj unikalny email dla bieżącego testu. Dla istniejących kont wywołaj `POST /api/users` z hasłem `correct-password` i sprawdź status `201`.
-4. Otwórz `/login`, wypełnij pola przez `getByLabel('Email')` i `getByLabel('Password')`, następnie kliknij przycisk `Sign in`.
-5. Sprawdź komunikat przez `getByTestId('login-error')`. Wspólna asercja ma odczytywać oczekiwanie z tabeli.
+4. Otwórz `/login` przez uzupełniony `WorkshopLoginPage`. Jego `loginAs` wypełnia pola przez `getByLabel('Email')` i `getByLabel('Password')`, następnie klika `Sign in`.
+5. Sprawdź komunikat przez locator `errorMessage` wskazujący `getByTestId('login-error')`. Wspólna asercja w teście ma odczytywać oczekiwanie z tabeli.
 6. Dodaj cleanup kont utworzonych przez test, np. przez `try/finally` lub fixture. Dla nieznanego użytkownika nie twórz konta.
+7. W końcowej wersji przenieś przygotowanie i cleanup kont do typowanej fixture z opcją utworzenia konta. Zachowaj `//Arrange`, `//Act`, `//Assert` i wskaż wszystkie pięć zasad SMURF.
 
 ## Weryfikacja
 

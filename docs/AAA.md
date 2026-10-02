@@ -24,7 +24,7 @@ W tej części wykonujesz zachowanie, które testujesz:
 - wywołanie endpointu,
 - przejście przez pojedynczy przepływ użytkownika.
 
-Dobra sekcja Act zwykle ma jedną główną akcję. Jeżeli akcji jest kilka, test prawdopodobnie sprawdza więcej niż jeden temat.
+Dobra sekcja Act opisuje jedno zachowanie. Logowanie może wymagać kilku kroków technicznych — wypełnienia pól i kliknięcia — albo jednego wywołania `loginAs`. Jeśli test dotyczy samego wysłania formularza, wypełnienie pól można umieścić w Arrange.
 
 ## Assert
 
@@ -40,19 +40,30 @@ Asercje powinny dotyczyć efektu, a nie przypadkowych szczegółów implementacj
 
 ## Przykład
 
+Poniższy kompletny test można zapisać w `tests/workshop/login-aaa.spec.ts`. Korzysta z istniejącego pomocniczego HTML z `fixtures/smurf/loginForm.ts`, więc sprawdza rezultat formularza demonstracyjnego. Ten formularz pokazuje `Invalid credentials` dla błędnego hasła; lokalna aplikacja z `app/server.js` ma własne komunikaty i stan użytkowników.
+
 ```ts
-test('shows error for invalid login', async ({ page, loginPage, seedUserId }) => {
-  // Arrange
+import { test, expect } from '@playwright/test';
+import { loginFormHtml } from '../../fixtures/smurf/loginForm';
+
+test('pokazuje błąd po wysłaniu formularza z błędnym hasłem', async ({ page }) => {
+  //Arrange
+  const user = { email: 'unknown.user@example.com', password: 'wrong-password' };
   await page.setContent(loginFormHtml);
-  const email = `${seedUserId}@example.com`;
+  await page.getByLabel('Email').fill(user.email);
+  await page.getByLabel('Password').fill(user.password);
 
-  // Act
-  await loginPage.loginAs(email, 'wrong-password');
+  //Act
+  await page.getByRole('button', { name: 'Sign in' }).click();
 
-  // Assert
-  await expect(loginPage.flashMessage).toHaveText('Invalid credentials');
+  //Assert
+  await expect(page.getByTestId('flash-message')).toHaveText('Invalid credentials');
 });
 ```
+
+Istniejący [przykład AAA](../tests/patterns/login-aaa.spec.ts) podstawia HTML przez `page.route`. W obu podejściach w teście widać przygotowanie, akcję i rezultat. Test lokalnej aplikacji otwiera `/login` i sprawdza `login-error`, bez podstawiania HTML.
+
+W testach z fixtures część Arrange wykonuje się przed wejściem do funkcji testowej. Oznacz przygotowanie także w fixture, a w teście pozostaw `//Arrange`, `//Act`, `//Assert` przy odpowiadających im krokach. Sprawdzenie statusu POST przygotowującego konto należy do Arrange, a sprawdzenie wyniku badanego logowania do Assert. Cleanup konta umieść w `finally` albo teardown fixture, również na wypadek błędu asercji.
 
 ## Checklista
 

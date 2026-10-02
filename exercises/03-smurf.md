@@ -6,11 +6,20 @@ Ocenić istniejący test według zasad SMURF i poprawić te elementy, które zwi
 
 ## Zadania
 
+Punktem startowym jest własny test z ćwiczenia 02. Utwórz jego wariant w `tests/workshop/login-smurf.spec.ts`; zachowaj Page Object i rzeczywistą aplikację.
+
 1. Sprawdź, czy test jest mały i dotyczy jednego zachowania.
 2. Usuń zbędne kroki, które nie wpływają na asercję.
-3. Upewnij się, że dane testowe są deterministyczne.
+3. Upewnij się, że stan użytkownika i oczekiwany wynik są znane. Nieznany użytkownik ma nieutworzony email; dane kont tworzonych przez API muszą być izolowane i sprzątane.
 4. Zastąp kruche selektory selektorami po roli, labelu albo `data-testid`.
 5. Sprawdź, czy test nie używa twardych timeoutów.
+6. Zachowaj `//Arrange`, `//Act`, `//Assert` i dodaj krótkie komentarze wskazujące **Small**, **Maintainable**, **Understandable**, **Repeatable**, **Fast** w swoim kodzie. Typowane fixtures wprowadzisz w ćwiczeniu 04.
+
+## Weryfikacja
+
+```bash
+npx playwright test tests/workshop/login-smurf.spec.ts --project=chromium --repeat-each=2
+```
 
 ## Kryteria ukończenia
 
@@ -21,4 +30,6 @@ Ocenić istniejący test według zasad SMURF i poprawić te elementy, które zwi
 
 ## Gotowy wariant referencyjny
 
-Po wykonaniu ćwiczenia porównaj swoje rozwiązanie z `tests/smurf/example.spec.ts`. Ten plik jest duplikatem przykładu po refaktoryzacji w kierunku SMURF: dane testowe są w fixture, formularz testowy jest poza specyfikacją, a każdy test sprawdza jedno zachowanie.
+Porównaj strukturę z istniejącym `tests/patterns/login-smurf-before-each.spec.ts`. Pokazuje dwa małe testy, wspólne `beforeEach`, stałe dane i helper `submitLoginForm`. HTML jest zapisany w tym samym pliku i podstawiany przez `page.route`; ten przykład nie używa typowanych fixtures. Twoja końcowa wersja zachowuje Page Object z ćwiczenia 02 i korzysta z lokalnej aplikacji.
+
+Pełne znaczenie pięciu zasad i ich miejsca w projekcie opisuje [SMURF](../docs/SMURF.md).

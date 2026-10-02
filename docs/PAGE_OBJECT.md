@@ -1,6 +1,13 @@
 # Page Object
 
-Page Object to warstwa, która nazywa elementy i zachowania ekranu językiem domeny. W projekcie warsztatowym przykładem jest `src/pageobjects/LoginPage.ts`.
+Page Object to warstwa, która nazywa elementy i zachowania ekranu językiem domeny. W projekcie są dwa warianty:
+
+| Klasa | Formularz | Komunikat wyniku |
+|---|---|---|
+| [LoginPage](../src/pageobjects/LoginPage.ts) | HTML podstawiany przez `tests/patterns/login-page-object.spec.ts`; kompletna implementacja. | `flashMessage` wskazuje `flash-message`; test oczekuje `Invalid credentials`. |
+| [WorkshopLoginPage](../src/pageobjects/WorkshopLoginPage.ts) | Rzeczywista aplikacja z `app/server.js`; szkielet do uzupełnienia. | Docelowy `errorMessage` wskazuje `login-error`; błędne dane dają `Nieprawidłowy login lub hasło.`. |
+
+Obie klasy korzystają z [BasePage](../src/pageobjects/basePage.ts), którego `open` wykonuje nawigację. `LoginPage` otwiera względne `/login`, natomiast `WorkshopLoginPage` używa `LOGIN_URL` lub `http://localhost:3000/login`.
 
 ## Po co używać Page Object
 
@@ -20,26 +27,43 @@ Page Object to warstwa, która nazywa elementy i zachowania ekranu językiem dom
 - Ukrywania całego scenariusza w jednej metodzie typu `doEverything`.
 - Dodawania asercji, które sprawiają, że test przestaje mówić, co sprawdza.
 - Tworzenia Page Object dla każdego drobnego komponentu bez realnego powodu.
-- Przekazywania do Page Object danych, które powinny zostać w teście jako część Arrange.
+- Tworzenia lub sprzątania kont wewnątrz metody logowania; dane przygotowuje test lub fixture i przekazuje do `loginAs`.
 
 ## Przykład
 
+Poniżej struktura kompletnego `src/pageobjects/LoginPage.ts`. Import `./basePage` jest względny wobec tego pliku. Locatory inicjalizowane są w konstruktorze, po `super`.
+
 ```ts
-export class LoginPage {
-  constructor(private readonly page: Page) {}
+import { type Locator, type Page } from '@playwright/test';
+import { BasePage } from './basePage';
 
-  readonly emailInput = this.page.getByLabel('Email');
-  readonly passwordInput = this.page.getByLabel('Password');
-  readonly submitButton = this.page.getByRole('button', { name: 'Sign in' });
-  readonly flashMessage = this.page.getByTestId('flash-message');
+export class LoginPage extends BasePage {
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly submitButton: Locator;
+  readonly flashMessage: Locator;
 
-  async loginAs(email: string, password: string) {
+  constructor(page: Page) {
+    super(page, '/login');
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.submitButton = page.getByRole('button', { name: 'Sign in' });
+    this.flashMessage = page.getByTestId('flash-message');
+  }
+
+  async loginAs(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.submitButton.click();
   }
 }
 ```
+
+Uruchom istniejący test: `npx playwright test tests/patterns/login-page-object.spec.ts --project=chromium`. Uzupełnianie `WorkshopLoginPage` i użycie polskiego komunikatu opisuje [ćwiczenie 02](../exercises/02-page-object.md).
+
+## Odpowiednik dla API
+
+W testach samego API wydziel klasę przyjmującą `APIRequestContext`, np. `ApiHelperPage`, z metodami `createUser`, `listUsers`, `updateUser` i `deleteUser`. Helper skupia ścieżki endpointów i `encodeURIComponent(email)`, a test sprawdza status oraz JSON zwróconego `APIResponse`. Nie potrzebuje `Page` ani przeglądarki. Taką klasę uczestnik tworzy w [ćwiczeniu 07](../exercises/07-testy-api.md).
 
 ## Reguła warsztatowa
 

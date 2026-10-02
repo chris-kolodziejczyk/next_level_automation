@@ -23,9 +23,23 @@ Playwright automatycznie uruchamia lokalną aplikację albo korzysta z już dzia
 
 Utwórz katalog `tests/workshop` i pliki wskazane w ćwiczeniach. Są to pliki do napisania przez uczestnika. Ćwiczenia z Page Object wymagają uzupełnienia TODO w `src/pageobjects/WorkshopLoginPage.ts`, a wariant z fixtures również TODO w `fixtures/smurf/fixtures.ts`.
 
-Uruchamiaj konkretny plik poleceniem podanym w ćwiczeniu. Pełne `npm test` obejmuje przykłady w `tests` oraz lokalnie dostępne [rozwiązania](../docs/rozwiazania/README.md), korzystając ze wspólnej konfiguracji w głównym katalogu.
+Uruchamiaj konkretny plik poleceniem podanym w ćwiczeniu, po jego utworzeniu. Istniejące przykłady sprawdzisz przez `npx playwright test tests/patterns --project=chromium`. Pełne `npm test` obejmuje wszystkie dostępne testy ze wspólnej konfiguracji w głównym katalogu.
+
+Opcjonalne rozwiązania prowadzącego znajdują się w `docs/rozwiazania`, z instrukcją `docs/rozwiazania/README.md`. Ten katalog jest pomijany przez Git i nie jest dostępny po samym klonowaniu. Jeśli został udostępniony lokalnie, jego testy również zbierze główna konfiguracja.
 
 Każdy test tworzący dane ma używać własnego adresu email i usuwać swojego użytkownika po wykonaniu, również po błędzie asercji. Nie wywołuj globalnego `/api/reset` podczas równoległych testów. W przykładach API używaj ścieżek `/api/users` i `/api/users/${encodeURIComponent(email)}`.
+
+`LoginPage` służy gotowemu przykładowi z podstawionym HTML i `flash-message`. `WorkshopLoginPage` jest szkieletem dla rzeczywistej aplikacji z `login-error`. Uzupełniaj drugi z nich do ćwiczeń UI. Wbudowana fixture `request` korzysta z `BASE_URL`, a worker-scoped `api` z `API_BASE_URL`. `loginPage` w `fixtures/loginPage/fixtures.ts` tylko konstruuje obiekt; uczestnik dodaje otwarcie strony i przygotowanie konta.
+
+## Docelowy zapis rozwiązań
+
+- Każdy test ma oznaczenia `//Arrange`, `//Act`, `//Assert`.
+- Od zadania 2 testy UI korzystają z Page Object; selektory i interakcje mają osobny plik.
+- W zadaniu 7 wywołania HTTP są w klasie pośredniej, np. `ApiHelperPage`, używanej podobnie do Page Object. Klasa przyjmuje `APIRequestContext`, bez `Page` i bez przeglądarki.
+- W zadaniu 9 osobną odpowiedzialność ma `DataGenerator`; testy sprawdzają jego kontrakt bez UI.
+- Dla zadań 3–10 wskaż w komentarzach wszystkie pięć zasad SMURF i odpowiadające im elementy kodu. [SMURF](../docs/SMURF.md) opisuje konkretne punkty do omówienia na warsztacie.
+
+Page Object, helper API, fixtures, generator i test mają osobne pliki, gdy pełnią odrębne role. Dane biznesowe i oczekiwania są stałe; identyfikatory techniczne mogą być unikalne. Zakres fixture ma zapewniać izolację, a cleanup wykonywać się także po błędzie.
 
 ## Zasada pracy
 

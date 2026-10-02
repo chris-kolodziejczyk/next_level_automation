@@ -12,9 +12,10 @@ Przygotuj środowisko według [instrukcji](README.md#przygotowanie-do-rozszerze�
 
 1. Utwórz unikalnego użytkownika przez `POST /api/users` z `email`, `password` oraz `active: true`. Sprawdź status `201` i pole `user.active` w odpowiedzi.
 2. W Arrange zablokuj go przez `PATCH /api/users/${encodeURIComponent(email)}` z danymi `{ active: false }`. Sprawdź status `200` i `user.active === false`.
-3. W Act otwórz formularz i spróbuj zalogować się poprawnym emailem oraz hasłem tego użytkownika. Możesz użyć uzupełnionego `WorkshopLoginPage`.
+3. W Arrange otwórz formularz przez uzupełniony `WorkshopLoginPage`. W Act wywołaj `loginAs` z poprawnym emailem i hasłem tego użytkownika.
 4. W Assert sprawdź dokładny komunikat `Konto użytkownika jest zablokowane.` w `getByTestId('login-error')` oraz brak widocznego nagłówka `Dashboard`.
 5. Usuń użytkownika przez DELETE i sprawdź status `204`. Zapewnij cleanup także wtedy, gdy PATCH albo asercja UI zgłosi błąd.
+6. W końcowej wersji wydziel tworzenie i cleanup konta do typowanej fixture, zachowując zmianę stanu przez PATCH w Arrange testu. Oznacz AAA i wskaż pięć zasad SMURF.
 
 Przy API korzystaj z fixture `request` lub kontekstu `api` z `fixtures/loginPage/fixtures.ts`. W drugim przypadku zaimportuj rozszerzony `test` z tego pliku.
 
@@ -33,6 +34,6 @@ npx playwright test tests/workshop/locked-user.spec.ts --project=chromium
 
 ## Rozszerzenie
 
-W osobnym teście odblokuj konto przez `{ active: true }` i sprawdź udane logowanie: nagłówek `Dashboard` i `welcome-message` o treści `Welcome ${email}`. Nowy test ma samodzielnie przygotować swoje konto.
+W osobnym teście utwórz własne, początkowo zablokowane konto (`active: false`), odblokuj je przez `{ active: true }` i sprawdź udane logowanie: nagłówek `Dashboard` i `welcome-message` o treści `Welcome ${email}`. Stan początkowy możesz przekazać jako opcję fixture. Test nie zależy od wykonania scenariusza blokady.
 
 Dokumentacja: [przygotowanie stanu przez API](https://playwright.dev/docs/api-testing).

@@ -8,10 +8,12 @@ Rozróżnić błąd selektora od błędnego oczekiwania, korzystając z raportu 
 
 Przygotuj środowisko według [instrukcji](README.md#przygotowanie-do-rozszerzeń). Utwórz `tests/workshop/login-debug.spec.ts` z działającym testem logowania nieznanego użytkownika. Użyj unikalnego, nieutworzonego emaila i oczekuj `Nieprawidłowy login lub hasło.` w `login-error`.
 
+Użyj uzupełnionego `WorkshopLoginPage`; jego `errorMessage` wskazuje komunikat. Przygotowanie danych i otwarcie strony możesz przenieść do fixtures. Zachowaj oznaczenia AAA i pięć zasad SMURF.
+
 ## Zadania
 
 1. Uruchom test i upewnij się, że przechodzi.
-2. Celowo zmień tylko selektor komunikatu z `getByTestId('login-error')` na `getByTestId('flash-message')`.
+2. Celowo zmień tylko selektor `errorMessage` w Page Object z `getByTestId('login-error')` na `getByTestId('flash-message')`. Asercję w teście zostaw bez zmian.
 3. Uruchom wyłącznie ten plik:
 
    ```bash

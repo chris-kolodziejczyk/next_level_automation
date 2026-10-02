@@ -29,6 +29,7 @@ Nazwy trybów są normalizowane do małych liter. Wynik zawsze ma typ `string`, 
 3. W pliku `tests/workshop/data-generator.spec.ts` utwórz instancję klasy i sprawdź długość oraz dozwolone znaki w trzech trybach. Nie porównuj wyniku z konkretnym losowym stringiem.
 4. Dodaj przypadek długości `0` oraz trybu `LETTERS`. Sprawdź, że zachowanie odpowiada kontraktowi.
 5. Omów, czy losowy sufiks wystarcza do izolacji danych. Przy użytkownikach API połącz go z identyfikatorem testu/wykonania i zachowaj wygenerowany email do cleanup.
+6. Oznacz przygotowanie instancji `//Arrange`, wywołanie metody `//Act`, a sprawdzenie właściwości `//Assert`. Wskaż pięć zasad SMURF: osobne przypadki kontraktu, wydzieloną klasę, czytelne nazwy, asercje niezależne od losowej wartości i wykonanie bez przeglądarki.
 
 Przykład importu z pliku w `tests/workshop`:
 
@@ -40,7 +41,7 @@ const suffix: string = generator.randomString(12, 'letters');
 const email: string = `workshop-${suffix.toLowerCase()}@example.com`;
 ```
 
-Typy zmiennych pokazują użycie kontraktu; TypeScript potrafi też wywnioskować je z typu wyniku metody.
+Typy zmiennych pokazują użycie kontraktu; TypeScript potrafi też wywnioskować je z typu wyniku metody. Sam przykład emaila demonstruje wywołanie generatora. Gdy faktycznie tworzysz konto przez API, dodaj również identyfikator testu lub wykonania i cleanup z kroku 5.
 
 ## Weryfikacja
 

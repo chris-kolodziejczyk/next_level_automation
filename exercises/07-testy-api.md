@@ -8,6 +8,8 @@ Sprawdzić zachowanie endpointów bez otwierania przeglądarki, rozdzielając su
 
 Przygotuj środowisko według [instrukcji](README.md#przygotowanie-do-rozszerzeń). Utwórz `tests/workshop/users-api.spec.ts` i używaj fixture `request` z `@playwright/test`. Żaden test nie potrzebuje `page`.
 
+Docelowo wydziel wywołania HTTP do osobnej klasy, np. `ApiHelperPage`, a jej instancję dostarcz przez typowaną fixture zależną od `request`. Helper pełni rolę analogiczną do Page Object dla API; nie dziedziczy po `BasePage`.
+
 ## Przypadki
 
 | Przypadek | Żądanie | Status | Oczekiwana odpowiedź |
@@ -25,6 +27,7 @@ Przygotuj środowisko według [instrukcji](README.md#przygotowanie-do-rozszerze�
 4. Zapisz test PATCH dla unikalnego adresu, dla którego konto nie zostało utworzone.
 5. W teście sukcesu usuń użytkownika przez DELETE w cleanup i sprawdź status `204`. Nie próbuj parsować pustej odpowiedzi DELETE jako JSON.
 6. Dopilnuj, aby każdy test przygotowywał własny stan i nie zależał od kolejności wykonania.
+7. W `ApiHelperPage` dodaj metody `createUser`, `listUsers`, `updateUser`, `deleteUser`, przyjmując `APIRequestContext` w konstruktorze. Zwracaj `APIResponse`; status i JSON sprawdzaj w teście, a cleanup w teardown fixture. Zachowaj `//Arrange`, `//Act`, `//Assert` i wskaż pięć zasad SMURF.
 
 ## Weryfikacja
 
