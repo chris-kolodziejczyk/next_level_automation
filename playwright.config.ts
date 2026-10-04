@@ -9,25 +9,34 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '.env'), quiet: true });
 
 const baseURL = process.env.BASE_URL ?? 'http://localhost:3000';
+const isCI = !!process.env.CI;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
 	testDir: '.',
+	tsconfig: './tsconfig.json',
 	testMatch: [
 		'**/tests/**/*.spec.ts',
 		'**/tests/**/*.test.ts',
+		'**/tests/**/*Test.ts',
+		'**/docs/rozwiazania/**/*.spec.ts',
+		'**/docs/rozwiazania/**/*.test.ts',
 		'**/docs/rozwiazania/**/*Test.ts',
 	],
+	/* CI runs published tests; workshop examples and local solutions stay local. */
+	testIgnore: isCI
+		? ['**/tests/patterns/**', '**/docs/rozwiazania/**']
+		: [],
 	/* Run tests in files in parallel */
 	fullyParallel: true,
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
-	forbidOnly: !!process.env.CI,
+	forbidOnly: isCI,
 	/* Retry on CI only */
-	retries: process.env.CI ? 2 : 0,
+	retries: isCI ? 2 : 0,
 	/* Opt out of parallel tests on CI. */
-	workers: process.env.CI ? 1 : undefined,
+	workers: isCI ? 1 : undefined,
 	/* Reporter to use. See https://playwright.dev/docs/test-reporters */
 	reporter: [['list'], ['html', { open: 'never' }]],
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -85,6 +94,6 @@ export default defineConfig({
 		cwd: __dirname,
 		url: new URL('/api/health', baseURL).href,
 		env: { PORT: new URL(baseURL).port || '3000' },
-		reuseExistingServer: !process.env.CI,
+		reuseExistingServer: !isCI,
 	},
 });

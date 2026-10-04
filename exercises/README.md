@@ -21,15 +21,17 @@ Po ćwiczeniach podstawowych wykonaj rozszerzenia 05–10 w podanej kolejności.
 
 Playwright automatycznie uruchamia lokalną aplikację albo korzysta z już działającego serwera. Możesz też otworzyć ją ręcznie przez `npm run app`. Domyślnie działa pod `http://localhost:3000`; endpointy opisuje [app/README.md](../app/README.md). Testy lokalnej aplikacji mają korzystać z serwera, bez podstawiania HTML przez `page.route`.
 
-Utwórz katalog `tests/workshop` i pliki wskazane w ćwiczeniach. Są to pliki do napisania przez uczestnika. Ćwiczenia z Page Object wymagają uzupełnienia TODO w `src/pageobjects/WorkshopLoginPage.ts`, a wariant z fixtures również TODO w `fixtures/smurf/fixtures.ts`.
+W `tests/workshop` znajduje się przeniesione rozwiązanie `zadanie1Test.ts`. Pozostałe pliki wskazane w ćwiczeniach tworzy uczestnik. Ćwiczenia z Page Object wymagają uzupełnienia TODO w `src/pageobjects/WorkshopLoginPage.ts`, a wariant z fixtures również TODO w `fixtures/smurf/fixtures.ts`.
 
-Uruchamiaj konkretny plik poleceniem podanym w ćwiczeniu, po jego utworzeniu. Istniejące przykłady sprawdzisz przez `npx playwright test tests/patterns --project=chromium`. Pełne `npm test` obejmuje wszystkie dostępne testy ze wspólnej konfiguracji w głównym katalogu.
+Uruchamiaj konkretny plik poleceniem podanym w ćwiczeniu, po jego utworzeniu. Wszystkie przeniesione rozwiązania sprawdzisz przez `npm test -- tests/workshop --project=chromium`. Pełne lokalne `npm test` obejmuje również nieuzupełnione materiały szkoleniowe w `tests/patterns`; są one pomijane w CI i podczas kontroli typów.
 
 Opcjonalne rozwiązania prowadzącego znajdują się w `docs/rozwiazania`, z instrukcją `docs/rozwiazania/README.md`. Ten katalog jest pomijany przez Git i nie jest dostępny po samym klonowaniu. Jeśli został udostępniony lokalnie, jego testy również zbierze główna konfiguracja.
 
+Kolejne kompletne rozwiązania możesz przenosić razem z Page Object, fixtures, helperem API i generatorem do `tests/workshop`, również do osobnych podfolderów. Playwright rozpoznaje nazwy `*Test.ts`, `*.spec.ts` i `*.test.ts`. Wspólny `BasePage` jest dostępny przez `@pageobjects/basePage`; pozostałe pliki zadania zachowują importy względne. Po dodaniu plików do commita GitHub Actions uruchomi je bez zmian w workflow. Rozdzielając pliki między katalogi projektu, dostosuj ich importy według [instrukcji](../README.md#przenoszenie-kolejnych-rozwiązań-do-ci).
+
 Każdy test tworzący dane ma używać własnego adresu email i usuwać swojego użytkownika po wykonaniu, również po błędzie asercji. Nie wywołuj globalnego `/api/reset` podczas równoległych testów. W przykładach API używaj ścieżek `/api/users` i `/api/users/${encodeURIComponent(email)}`.
 
-`LoginPage` służy gotowemu przykładowi z podstawionym HTML i `flash-message`. `WorkshopLoginPage` jest szkieletem dla rzeczywistej aplikacji z `login-error`. Uzupełniaj drugi z nich do ćwiczeń UI. Wbudowana fixture `request` korzysta z `BASE_URL`, a worker-scoped `api` z `API_BASE_URL`. `loginPage` w `fixtures/loginPage/fixtures.ts` tylko konstruuje obiekt; uczestnik dodaje otwarcie strony i przygotowanie konta.
+Materiał `tests/patterns/login-page-object.spec.ts` odwołuje się do `LoginPage` dla podstawionego HTML i `flash-message`; ta klasa wymaga przygotowania w ramach przykładu. `WorkshopLoginPage` jest szkieletem dla rzeczywistej aplikacji z `login-error`. Uzupełniaj go do ćwiczeń UI. Wbudowana fixture `request` korzysta z `BASE_URL`, a worker-scoped `api` z `API_BASE_URL`. `loginPage` w `fixtures/loginPage/fixtures.ts` tylko konstruuje obiekt; uczestnik dodaje otwarcie strony i przygotowanie konta.
 
 ## Docelowy zapis rozwiązań
 

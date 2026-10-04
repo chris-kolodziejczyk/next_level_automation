@@ -16,6 +16,15 @@ npm run install:browsers
 
 Playwright uruchamia aplikację automatycznie. Polecenie `npm run app` jest potrzebne, jeśli chcesz osobno otworzyć formularz lub uruchomić nagrywanie kroków.
 
+Gotowe rozwiązania przeniesione do `tests/workshop` uruchomisz bez nieuzupełnionych materiałów `patterns`:
+
+```bash
+npm test -- tests/workshop
+npm test -- tests/workshop/zadanie1Test.ts --project=chromium
+```
+
+Lokalne pełne `npm test` obejmuje też `patterns` i opcjonalne `docs/rozwiazania`. GitHub Actions ustawia `CI=true`, które wyklucza te dwa katalogi. Kolejne pliki `*Test.ts`, `*.spec.ts` i `*.test.ts` w `tests`, również w podfolderach, są wykrywane automatycznie.
+
 ```bash
 npm test
 ```
@@ -64,6 +73,8 @@ npx tsc --noEmit
 npm run lint:tests
 npx eslint utils --max-warnings=0
 ```
+
+Kontrola TypeScript pomija nieuzupełnione przykłady w `tests/patterns`. Przeniesione testy i ich części możesz lintować przez `npx eslint tests/workshop --max-warnings=0`; pliki `*Fixture.ts` mają te same reguły fixtures co lokalne rozwiązania.
 
 Po uzupełnieniu TODO w Page Object i fixtures sprawdź również:
 
@@ -120,3 +131,5 @@ git commit -m "Add workshop exercise solution"
 ```
 
 `git add .` pomija `.env`, raporty, `node_modules` i `docs/rozwiazania` zgodnie z `.gitignore`. Rozwiązania uczestnika zapisuj w `tests/workshop` i w pozostałych katalogach wskazanych w ćwiczeniach.
+
+Aby uruchamiać kolejne rozwiązanie w CI, przenieś komplet plików zadania do `tests/workshop` albo jego podfolderu i dodaj je do commita. Zachowaj importy względne między plikami zadania. Wspólny `BasePage` jest importowany przez alias `@pageobjects/basePage`, więc głębokość katalogu nie wymaga zmian. Jeśli Page Object, fixture lub helper umieszczasz w osobnych katalogach projektu, dostosuj ich importy przy użyciu `@pageobjects/*`, `@fixtures/*` i `@utils/*`. Szczegóły zawiera [instrukcja przenoszenia](README.md#przenoszenie-kolejnych-rozwiązań-do-ci).

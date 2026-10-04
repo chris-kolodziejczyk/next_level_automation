@@ -39,16 +39,16 @@ Polecenia wykonuj z głównego katalogu sklonowanego repozytorium. `npm ci` uży
    npm run install:browsers
    ```
 
-4. Uruchom testy.
+4. Uruchom przeniesione rozwiązania.
 
    ```bash
-   npm test
+   npm test -- tests/workshop
    ```
 
-   To uruchamia wszystkie dostępne testy na Chromium, Firefox i WebKit. Same przykłady startera na jednej przeglądarce uruchomisz przez:
+   To uruchamia rozwiązania z `tests/workshop` na Chromium, Firefox i WebKit. Tylko Chromium wybierzesz przez:
 
    ```bash
-   npx playwright test tests/patterns --project=chromium
+   npm test -- tests/workshop --project=chromium
    ```
 
    Konfiguracja Playwright automatycznie uruchamia lokalną aplikację albo korzysta z już działającego serwera; nie trzeba wcześniej wywoływać `npm run app`.
@@ -74,7 +74,7 @@ Domyślne adresy to `http://localhost:3000`, `http://localhost:3000/login` oraz 
 
 Ręczne `npm run app` odczytuje `PORT` z otoczenia procesu i nie ładuje `.env`. Konfiguracja Playwright wczytuje `.env` i przekazuje port wynikający z `BASE_URL` do serwera. Dla innego środowiska testowego dostosuj również `webServer`.
 
-`WorkshopLoginPage` i `fixtures/smurf/fixtures.ts` zawierają TODO do ćwiczeń. Gotowe przykłady startera nie używają tych nieuzupełnionych fixtures. Pliki w `tests/workshop` tworzysz w trakcie warsztatu.
+`WorkshopLoginPage` i `fixtures/smurf/fixtures.ts` zawierają TODO do ćwiczeń. W `tests/workshop` znajduje się przeniesione rozwiązanie `zadanie1Test.ts`; kolejne pliki tworzysz lub przenosisz w trakcie warsztatu. Materiały z `tests/patterns` wymagają uzupełnienia i są pomijane w CI oraz podczas kontroli typów.
 
 Opcjonalny katalog `docs/rozwiazania` jest pomijany przez Git i nie jest pobierany przy klonowaniu. Jeśli prowadzący udostępni go lokalnie, główna konfiguracja obejmie również te testy.
 
@@ -86,6 +86,8 @@ Możesz użyć skryptów pomocniczych:
 - Linux / macOS lub Git Bash: `bash setup.sh`
 
 Skrypty tworzą `.env` tylko wtedy, gdy go nie ma, następnie uruchamiają `npm ci`, instalację przeglądarek i `npm test`. Istniejący `.env` zostaje zachowany.
+
+Pełny lokalny zestaw zawiera nieuzupełnione materiały `tests/patterns`; gotowe rozwiązania uruchom poleceniem z punktu 4. W GitHub Actions `patterns` i lokalne `docs/rozwiazania` są pomijane, a testy przeniesione do `tests/workshop` działają automatycznie. CI ustawia adresy aplikacji i API bez lokalnego `.env`.
 
 ## Kontrola kodu
 

@@ -15,7 +15,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['fixtures/**/*.ts', 'docs/rozwiazania/**/*Fixture.ts'],
+    files: ['fixtures/**/*.ts', 'tests/**/*Fixture.ts', 'docs/rozwiazania/**/*Fixture.ts'],
     rules: {
       // Playwright requires a destructured first argument even without dependencies.
       'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],

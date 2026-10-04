@@ -4,13 +4,14 @@ Starter warsztatowy dla osób znających podstawy Playwrighta. Uczestnik ćwiczy
 
 ## Aktualny stan startera
 
-- `tests/patterns/login-aaa.spec.ts`, `login-page-object.spec.ts` i `login-smurf-before-each.spec.ts` to gotowe przykłady na HTML podstawionym przez `page.route`. `LoginPage.ts` obsługuje formularz z przykładu Page Object.
+- `tests/patterns/login-aaa.spec.ts`, `login-page-object.spec.ts` i `login-smurf-before-each.spec.ts` to materiały szkoleniowe na HTML podstawionym przez `page.route`. Mają miejsca do uzupełnienia i są pomijane w CI oraz podczas kontroli typów.
+- `tests/workshop/zadanie1Test.ts` to przeniesione rozwiązanie pierwszego zadania, uruchamiane również przez GitHub Actions.
 - `src/pageobjects/WorkshopLoginPage.ts` jest szkieletem z TODO: locatory i metoda `loginAs` są zadaniem uczestnika.
 - `fixtures/smurf/fixtures.ts` jest typowanym szkieletem z TODO dla `testUser` i `loginPage`. Niezrealizowane fixtures zgłaszają błąd TODO.
 - `fixtures/loginPage/fixtures.ts` pokazuje kontekst API o zasięgu workera, identyfikator danych i tworzenie `WorkshopLoginPage`. Nie tworzy użytkownika przez API ani nie otwiera strony automatycznie.
 - Testy i Page Objects TestArena zostały usunięte. Scenariusze API + UI należy napisać w ramach ćwiczeń.
 
-Opcjonalne rozwiązania prowadzącego znajdują się lokalnie w `docs/rozwiazania/zadanie1`–`zadanie10`; ich instrukcję zawiera `docs/rozwiazania/README.md`. Ten katalog jest pomijany przez Git i nie pojawi się po klonowaniu repozytorium. Jeśli jest dostępny, główne konfiguracje Playwright, TypeScript i ESLint obejmują także jego pliki, a `npm test` uruchamia również rozwiązania.
+Opcjonalne rozwiązania prowadzącego znajdują się lokalnie w `docs/rozwiazania/zadanie1`–`zadanie10`; ich instrukcję zawiera `docs/rozwiazania/README.md`. Ten katalog jest pomijany przez Git i nie pojawi się po klonowaniu repozytorium. Jeśli jest dostępny, główne konfiguracje Playwright, TypeScript i ESLint obejmują także jego pliki, a lokalne `npm test` uruchamia również rozwiązania. Aby udostępnić rozwiązanie w CI, przenieś jego komplet plików do `tests/workshop` i dodaj je do commita.
 
 ## Struktura
 
@@ -51,14 +52,16 @@ Opcjonalne rozwiązania prowadzącego znajdują się lokalnie w `docs/rozwiazani
 │     └─ loginForm.ts
 ├─ src/pageobjects/
 │  ├─ basePage.ts
-│  ├─ LoginPage.ts
 │  └─ WorkshopLoginPage.ts
 ├─ utils/generators/
 │  └─ dataGenerator.ts
-└─ tests/patterns/
-   ├─ login-aaa.spec.ts
-   ├─ login-page-object.spec.ts
-   └─ login-smurf-before-each.spec.ts
+└─ tests/
+   ├─ patterns/
+   │  ├─ login-aaa.spec.ts
+   │  ├─ login-page-object.spec.ts
+   │  └─ login-smurf-before-each.spec.ts
+   └─ workshop/
+      └─ zadanie1Test.ts
 ```
 
 `fixtures/smurf/loginForm.ts` zawiera pomocniczy HTML. Szkielet fixtures nie korzysta z niego; ćwiczenie z `WorkshopLoginPage` dotyczy aplikacji w `app/`.
@@ -77,10 +80,10 @@ cd next_level_automation
 1. Zainstaluj zależności: `npm ci`.
 2. Utwórz `.env`, jeśli go nie ma. Polecenia, które zachowują istniejący plik, są w [instrukcji setupu](README-SETUP.md#instalacja-krok-po-kroku).
 3. Zainstaluj przeglądarki: `npm run install:browsers`.
-4. Uruchom dostępne przykłady:
+4. Uruchom przeniesione rozwiązania:
 
 ```bash
-npx playwright test tests/patterns --project=chromium
+npm test -- tests/workshop --project=chromium
 ```
 
 ### Skrypty setup
@@ -97,7 +100,7 @@ Linux/macOS lub Git Bash:
 bash setup.sh
 ```
 
-Skrypty tworzą `.env`, jeśli nie istnieje, wykonują `npm ci`, instalują przeglądarki i uruchamiają pełne `npm test`. Konfiguracja Playwright uruchamia aplikację demo automatycznie.
+Skrypty tworzą `.env`, jeśli nie istnieje, wykonują `npm ci`, instalują przeglądarki i uruchamiają pełne `npm test`. Konfiguracja Playwright uruchamia aplikację demo automatycznie. Lokalny pełny zestaw obejmuje też materiały `patterns`, które wymagają uzupełnienia; gotowe rozwiązania uruchom poleceniem z punktu 4.
 
 ## Lokalna aplikacja
 
@@ -140,7 +143,7 @@ npx playwright test tests/workshop/login.spec.ts --project=chromium
 
 Ten plik należy utworzyć samodzielnie. Wybór konkretnego pliku uruchamia wyłącznie jego testy; konfiguracja zapewnia start lokalnej aplikacji.
 
-Materiały w [exercises/](exercises/README.md) wskazują istniejące przykłady i szkielety. Pliki w `tests/workshop`, wymienione w ćwiczeniach, tworzy uczestnik; nie są gotowymi testami startera.
+Materiały w [exercises/](exercises/README.md) wskazują istniejące przykłady i szkielety. Pliki wymienione w ćwiczeniach tworzy uczestnik; w `tests/workshop` jest już przeniesiony przykład `zadanie1Test.ts`.
 
 ### Rozszerzenia warsztatu
 
@@ -150,12 +153,13 @@ Generator został wydzielony z `BasePage` do klasy `DataGenerator` w `utils/gene
 
 ## Testy, raporty i CI
 
-Wszystkie dostępne testy uruchomisz przez `npm test`. Domyślnie działają na Chromium, Firefox i WebKit. Konfiguracja zbiera `*.spec.ts` i `*.test.ts` z `tests` oraz, jeśli lokalny katalog istnieje, `*Test.ts` z `docs/rozwiazania`. Przykłady z `tests/patterns` podstawiają HTML formularza; mimo tego wspólna konfiguracja uruchamia serwer demo przed testami.
+Konfiguracja zbiera `*.spec.ts`, `*.test.ts` i `*Test.ts` z `tests` oraz z opcjonalnego lokalnego `docs/rozwiazania`. Domyślnie testy działają na Chromium, Firefox i WebKit. Lokalny pełny zestaw `npm test` obejmuje także nieuzupełnione materiały z `tests/patterns`, więc może zgłosić błędy. Gotowe rozwiązania uruchamiaj przez `npm test -- tests/workshop`.
 
 | Polecenie | Działanie |
 |---|---|
 | `npm test -- --project=chromium` | Pełny zestaw tylko na Chromium |
-| `npx playwright test tests/patterns --project=chromium` | Przykłady dostarczone w repozytorium |
+| `npm test -- tests/workshop --project=chromium` | Przeniesione rozwiązania tylko na Chromium |
+| `npx playwright test tests/patterns --project=chromium` | Materiały szkoleniowe do uzupełnienia |
 | `npx playwright test "docs/rozwiazania" --project=chromium` | Tylko rozwiązania zadań |
 | `npx playwright test zadanie5/ --project=chromium` | Tylko rozwiązanie zadania 5 |
 | `npm run test:headed` | Widoczne okna przeglądarek |
@@ -165,15 +169,23 @@ Wszystkie dostępne testy uruchomisz przez `npm test`. Domyślnie działają na 
 
 Konfiguracja zapisuje trace każdego wykonania i screenshot przy błędzie. Lokalnie testy mogą działać równolegle; w CI używany jest jeden worker, dwie ponowne próby i blokada `test.only`.
 
-GitHub Actions uruchamia testy na push i pull request do `main` lub `master`. Raport HTML jest przechowywany przez 30 dni. Konfiguracja Playwright zapewnia start aplikacji demo również w CI.
+GitHub Actions uruchamia testy na push i pull request do `main` lub `master`, na Ubuntu z Node.js 24. Workflow ustawia `CI=true` oraz spójne `BASE_URL`, `LOGIN_URL` i `API_BASE_URL` dla lokalnej aplikacji na porcie 3000. Konfiguracja Playwright uruchamia serwer demo. Raport HTML jest przechowywany przez 30 dni.
 
-Pipeline instaluje zależności i przeglądarki oraz uruchamia testy. Nie uruchamia ESLint ani kontroli typów. Lokalny katalog rozwiązań nie trafia do checkoutu CI.
+Pipeline instaluje zależności i przeglądarki oraz uruchamia `npm test`. Przy `CI=true` Playwright pomija `tests/patterns` i `docs/rozwiazania`, a zbiera testy z pozostałej części `tests`, również z podfolderów. Pipeline nie uruchamia ESLint ani kontroli typów.
+
+### Przenoszenie kolejnych rozwiązań do CI
+
+Przenieś cały katalog zadania, np. `docs/rozwiazania/zadanie4` do `tests/workshop/zadanie4`, albo wszystkie jego pliki bezpośrednio do `tests/workshop`. Zachowaj wspólne położenie testu, Page Object, fixture i helpera, ponieważ importują się względnie. Dodaj wszystkie te pliki do commita; `docs/rozwiazania` pozostaje ignorowane przez Git.
+
+Pliki testów mogą zachować nazwy `zadanie4Test.ts` i `zadanie10FixturesTest.ts`. Page Objects, fixtures i helpery są importowane przez test, a nie uruchamiane jako osobne testy. Workflow nie wymaga dopisywania kolejnych zadań.
+
+Page Objects rozwiązań importują wspólną klasę przez `@pageobjects/basePage`. Główny `tsconfig.json` definiuje też `@fixtures/*` i `@utils/*`; Playwright korzysta z tego samego pliku konfiguracji. Dzięki temu przeniesienie katalogu zadania nie zmienia ścieżki do `BasePage`. Jeżeli rozdzielasz jego pliki pomiędzy `src`, `fixtures` i `tests`, popraw importy między nimi, korzystając z tych aliasów.
 
 ### TypeScript
 
 `tsconfig.json` używa `strict: true`, `noEmit: true` oraz `NodeNext` dla modułów i ich rozwiązywania. Pliki projektu pozostają CommonJS zgodnie z `"type": "commonjs"` w `package.json`.
 
-Projekt deklaruje zależność `typescript`; kontrolę typów całego projektu, także `docs/rozwiazania`, możesz uruchomić przez `npx tsc --noEmit`. Nie ma osobnego skryptu kontroli typów ani takiego kroku w CI. Uruchamianie testów przez Playwright nie zastępuje pełnej kontroli typów. Wspólna konfiguracja ESLint obejmuje rozwiązania; sprawdzisz je przez `npx eslint "docs/rozwiazania" --max-warnings=0`.
+Projekt deklaruje zależność `typescript`; kontrolę typów projektu, także `tests/workshop` i `docs/rozwiazania`, możesz uruchomić przez `npx tsc --noEmit`. `tests/patterns` jest wyłączone z tej kontroli, ponieważ zawiera nieuzupełnione przykłady szkoleniowe. Nie ma osobnego skryptu kontroli typów ani takiego kroku w CI. Uruchamianie testów przez Playwright nie zastępuje kontroli typów. Wspólna konfiguracja ESLint obejmuje rozwiązania; sprawdzisz je przez `npx eslint "docs/rozwiazania" --max-warnings=0`.
 
 `npm run lint:tests` sprawdza dostarczone testy, a `npx eslint utils --max-warnings=0` generator. `lint:src` i `lint:fixtures` w nieuzupełnionym starterze zgłaszają nieużywane argumenty w miejscach TODO; uruchom je ponownie po implementacji ćwiczeń 2 i 4.
 

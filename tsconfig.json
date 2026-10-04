@@ -7,6 +7,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "paths": {
+      "@pageobjects/*": ["./src/pageobjects/*"],
+      "@fixtures/*": ["./fixtures/*"],
+      "@utils/*": ["./utils/*"]
+    },
     "types": [
       "node",
       "@playwright/test"
@@ -20,5 +25,6 @@
     "tests/**/*.ts",
     "utils/**/*.ts",
     "docs/rozwiazania/**/*.ts"
-  ]
+  ],
+  "exclude": ["tests/patterns/**"]
 }
