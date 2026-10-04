@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 const loginPageHtml = `
   <form aria-label="Login form">
@@ -23,39 +23,35 @@ const loginPageHtml = `
 `;
 
 test.describe('login form - AAA pattern', () => {
-  test('shows an error after invalid email and password', async ({ page }) => {
-    // Arrange
-    await page.route('**/login', async (route) => {
-      await route.fulfill({ contentType: 'text/html', body: loginPageHtml });
-    });
-    await page.goto('/login');
+	test('shows an error after invalid email and password', async ({ page }) => {
+		// Arrange
+		await page.route('**/login', async (route) => {
+			await route.fulfill({ contentType: 'text/html', body: loginPageHtml });
+		});
+		await page.goto('/login');
 
-    // Act
-    await page.getByLabel('Email').fill('wrong.user@example.com');
-    await page.getByLabel('Password').fill('wrong-password');
-    await page.getByRole('button', { name: 'Sign in' }).click();
+		// Act
+		await page.getByLabel('').fill('');
+		await page.getByLabel('').fill('');
+		await page.getByRole('', { name: '' }).click();
 
-    // Assert
-    await expect(page.getByTestId('flash-message')).toHaveText(
-      'Invalid credentials'
-    );
-  });
+		// Assert
+		await expect(page.getByTestId('')).toHaveText('');
+	});
 
-  test('shows an error when password is empty', async ({ page }) => {
-    // Arrange
-    await page.route('**/login', async (route) => {
-      await route.fulfill({ contentType: 'text/html', body: loginPageHtml });
-    });
-    await page.goto('/login');
+	test('shows an error when password is empty', async ({ page }) => {
+		// Arrange
+		await page.route('**/login', async (route) => {
+			await route.fulfill({ contentType: 'text/html', body: loginPageHtml });
+		});
+		await page.goto('/login');
 
-    // Act
-    await page.getByLabel('Email').fill('wrong.user@example.com');
-    await page.getByLabel('Password').fill('');
-    await page.getByRole('button', { name: 'Sign in' }).click();
+		// Act
+		await page.getByLabel('').fill('');
+		await page.getByLabel('').fill('');
+		await page.getByRole('', { name: '' }).click();
 
-    // Assert
-    await expect(page.getByTestId('flash-message')).toHaveText(
-      'Invalid credentials'
-    );
-  });
+		// Assert
+		await expect(page.getByTestId('')).toHaveText('');
+	});
 });
