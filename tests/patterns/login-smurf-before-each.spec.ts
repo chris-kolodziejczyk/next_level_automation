@@ -24,11 +24,11 @@ const loginPageHtml = `
 
 const invalidCredentials = {
   unknownUser: {
-    email: 'unknown.user@example.com',
-    password: 'wrong-password',
+    email: '',
+    password: '',
   },
   emptyPassword: {
-    email: 'unknown.user@example.com',
+    email: '',
     password: '',
   },
 };
@@ -37,9 +37,9 @@ async function submitLoginForm(
   page: Page,
   credentials: { email: string; password: string }
 ) {
-  await page.getByLabel('Email').fill(credentials.email);
-  await page.getByLabel('Password').fill(credentials.password);
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByLabel('').fill(credentials.email);
+  await page.getByLabel('').fill(credentials.password);
+  await page.getByRole('', { name: '' }).click();
 }
 
 test.describe('login form - SMURF with beforeEach', () => {
@@ -53,16 +53,16 @@ test.describe('login form - SMURF with beforeEach', () => {
   test('shows an error for an unknown user', async ({ page }) => {
     await submitLoginForm(page, invalidCredentials.unknownUser);
 
-    await expect(page.getByTestId('flash-message')).toHaveText(
-      'Invalid credentials'
+    await expect(page.getByTestId('')).toHaveText(
+      ''
     );
   });
 
   test('shows an error for an empty password', async ({ page }) => {
     await submitLoginForm(page, invalidCredentials.emptyPassword);
 
-    await expect(page.getByTestId('flash-message')).toHaveText(
-      'Invalid credentials'
+    await expect(page.getByTestId('')).toHaveText(
+      ''
     );
   });
 });
