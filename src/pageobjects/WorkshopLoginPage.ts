@@ -1,8 +1,23 @@
 /**
  * @file Szkielet Page Object do ćwiczeń z formularzem lokalnej aplikacji.
  */
-import { type Page } from '@playwright/test';
+import { type Page, Locator } from '@playwright/test';
 import { BasePage } from './basePage';
+
+
+
+
+
+type loginExampleType = {
+  emailInput: Locator;
+  passInput: Locator;
+  submitButton: Locator;
+  errorMessage: Locator;
+  loginParams: {
+    email: string | string[],
+    password: string | string[]
+  }
+}
 
 /** URL formularza z LOGIN_URL, odczytany przy imporcie modułu, z lokalną wartością domyślną. */
 const loginUrl = process.env.LOGIN_URL ?? 'http://localhost:3000/login';
@@ -12,6 +27,14 @@ const loginUrl = process.env.LOGIN_URL ?? 'http://localhost:3000/login';
  * Locatory i loginAs wymagają implementacji przez uczestnika warsztatu.
  */
 export class WorkshopLoginPage extends BasePage {
+
+  readonly emailInput: Locator;
+  readonly passInput: Locator;
+  readonly submitButton: Locator
+  readonly errorMessage: Locator;
+
+
+
   // TODO: Zaimportuj typ Locator i zadeklaruj locatory:
   // emailInput, passwordInput, submitButton oraz errorMessage.
 
@@ -22,6 +45,10 @@ export class WorkshopLoginPage extends BasePage {
    */
   constructor(page: Page) {
     super(page, loginUrl);
+    this.emailInput = page.getByLabel('Email');
+    this.passInput = page.getByLabel('Password');
+    this.submitButton = page.getByRole('button', { name: 'Sign in' });
+    this.errorMessage = page.getByTestId('flash-message')
 
     // TODO: Zainicjalizuj locatory dla formularza lokalnej aplikacji.
     // Sprawdź app/server.js i dobierz selektory po labelu, roli lub data-testid.
@@ -36,9 +63,78 @@ export class WorkshopLoginPage extends BasePage {
    * @returns Obietnica odrzucana błędem TODO w obecnej wersji startera.
    * @throws {Error} Błąd TODO, dopóki metoda nie zostanie zaimplementowana.
    */
+  // async loginAs(email: string, password: string) {
+  //   // TODO: Wypełnij email i hasło, a następnie wyślij formularz.
+  //   // Asercję wyniku logowania pozostaw w teście.
+
+  //  await this.emailInput.fill(email);
+  //  await this.passInput.fill(password);
+  //  await this.submitButton.click();
+
+  //   // throw new Error('TODO: Zaimplementuj WorkshopLoginPage.loginAs');
+  // }
+
+    async loginAs(loginUserParams: loginExampleType) {
+    // TODO: Wypełnij email i hasło, a następnie wyślij formularz.
+    // Asercję wyniku logowania pozostaw w teście.
+
+   await this.emailInput.fill(loginUserParams.loginParams.email ? '' : '');
+   await this.passInput.fill(loginUserParams.loginParams.password ? '' : '');
+   await this.submitButton.click();
+
+    // throw new Error('TODO: Zaimplementuj WorkshopLoginPage.loginAs');
+  }
+}
+
+
+
+export class WorkshopLoginPageExample extends BasePage {
+
+  readonly emailInput: Locator;
+  readonly passInput: Locator;
+  readonly submitButton: Locator
+  readonly errorMessage: Locator;
+
+
+
+  // TODO: Zaimportuj typ Locator i zadeklaruj locatory:
+  // emailInput, passwordInput, submitButton oraz errorMessage.
+
+  /**
+   * Ustawia URL formularza; inicjalizacja locatorów pozostaje zadaniem uczestnika.
+   *
+   * @param page - Strona Playwrighta używana w bieżącym teście.
+   */
+  constructor(page: Page) {
+    super(page, loginUrl);
+    this.emailInput = page.getByLabel('Email');
+    this.passInput = page.getByLabel('Password');
+    this.submitButton = page.getByRole('button', { name: 'Sign in' });
+    this.errorMessage = page.getByTestId('flash-message')
+
+    // TODO: Zainicjalizuj locatory dla formularza lokalnej aplikacji.
+    // Sprawdź app/server.js i dobierz selektory po labelu, roli lub data-testid.
+  }
+
+
+
+  /**
+   * Miejsce do implementacji wypełnienia i wysłania formularza logowania.
+   * Oczekiwany rezultat ma sprawdzać test korzystający z Page Object.
+   *
+   * @param email - Adres wpisywany do pola Email po uzupełnieniu metody.
+   * @param password - Hasło wpisywane do pola Password po uzupełnieniu metody.
+   * @returns Obietnica odrzucana błędem TODO w obecnej wersji startera.
+   * @throws {Error} Błąd TODO, dopóki metoda nie zostanie zaimplementowana.
+   */
   async loginAs(email: string, password: string) {
     // TODO: Wypełnij email i hasło, a następnie wyślij formularz.
     // Asercję wyniku logowania pozostaw w teście.
-    throw new Error('TODO: Zaimplementuj WorkshopLoginPage.loginAs');
+
+   await this.emailInput.fill(email);
+   await this.passInput.fill(password);
+   await this.submitButton.click();
+
+    // throw new Error('TODO: Zaimplementuj WorkshopLoginPage.loginAs');
   }
 }

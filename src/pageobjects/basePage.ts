@@ -1,7 +1,7 @@
 /**
  * @file Wspólna nawigacja dla Page Objects korzystających ze strony Playwrighta.
  */
-import { type Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 
 /** Przechowuje stronę i domyślną ścieżkę otwieraną przez Page Object. */
 export class BasePage {
@@ -20,7 +20,13 @@ export class BasePage {
 	 * @param path - Ścieżka lub pełny URL; domyślnie wartość z konstruktora.
 	 * @returns Obietnica zakończenia nawigacji przez page.goto.
 	 */
-	async open(path = this.defaultPath) {
+	 async  open(path = this.defaultPath) {
 		await this.page.goto(path);
+	}
+
+	async checkTextMsg(selector: string = 'flash-message', textMsg: string = 'Invalid credentials') {
+		await expect(this.page.getByTestId(selector)).toHaveText(
+			textMsg
+		);
 	}
 }

@@ -25,6 +25,7 @@ export default defineConfig({
 		'**/docs/rozwiazania/**/*.test.ts',
 		'**/docs/rozwiazania/**/*Test.ts',
 	],
+	timeout:30,
 	/* CI runs published tests; workshop examples and local solutions stay local. */
 	testIgnore: isCI
 		? ['**/tests/patterns/**', '**/docs/rozwiazania/**']

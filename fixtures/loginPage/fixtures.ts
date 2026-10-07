@@ -38,6 +38,7 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
 		);
 	},
 
+	
 	loginPage: async ({ page }, use) => {
 		await use(new WorkshopLoginPage(page));
 	},
